@@ -16,6 +16,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "knote")
 @Data
 public class KnoteProperties {
+    @Value("${uploadDir:/tmp/uploads/}")
+    private String uploadDir;
+
     @Value("${minio.host:localhost}")
     private String minioHost;
 
