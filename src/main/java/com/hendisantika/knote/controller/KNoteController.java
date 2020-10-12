@@ -4,19 +4,24 @@ import com.hendisantika.knote.config.KnoteProperties;
 import com.hendisantika.knote.entity.Note;
 import com.hendisantika.knote.repository.NotesRepository;
 import io.minio.MinioClient;
+import org.apache.commons.io.IOUtils;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -110,6 +115,13 @@ public class KNoteController {
             return "index";
         }
         return "index";
+    }
+
+    @GetMapping(value = "/img/{name}", produces = MediaType.IMAGE_PNG_VALUE)
+    public @ResponseBody
+    byte[] getImageByName(@PathVariable String name) throws Exception {
+        InputStream imageStream = minioClient.getObject(properties.getMinioBucket(), name);
+        return IOUtils.toByteArray(imageStream);
     }
 
     private void uploadImage(MultipartFile file, String description, Model model) throws Exception {
