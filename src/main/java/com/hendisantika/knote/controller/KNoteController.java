@@ -1,6 +1,7 @@
 package com.hendisantika.knote.controller;
 
 import com.hendisantika.knote.config.KnoteProperties;
+import com.hendisantika.knote.entity.Note;
 import com.hendisantika.knote.repository.NotesRepository;
 import io.minio.MinioClient;
 import org.commonmark.parser.Parser;
@@ -8,8 +9,11 @@ import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.annotation.PostConstruct;
+import java.util.Collections;
 
 /**
  * Created by IntelliJ IDEA.
@@ -25,8 +29,10 @@ import javax.annotation.PostConstruct;
 public class KNoteController {
     private final Parser parser = Parser.builder().build();
     private final HtmlRenderer renderer = HtmlRenderer.builder().build();
+
     @Autowired
     private NotesRepository notesRepository;
+
     @Autowired
     private KnoteProperties properties;
     private MinioClient minioClient;
@@ -64,6 +70,18 @@ public class KNoteController {
             }
         }
         System.out.println("> Minio initialized!");
+    }
+
+    @GetMapping("/")
+    public String index(Model model) {
+        getAllNotes(model);
+        return "index";
+    }
+
+    private void getAllNotes(Model model) {
+        List<Note> notes = notesRepository.findAll();
+        Collections.reverse(notes);
+        model.addAttribute("notes", notes);
     }
 
 }
