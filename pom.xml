@@ -10,9 +10,9 @@
     </parent>
     <groupId>com.hendisantika</groupId>
     <artifactId>knote</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>knote</name>
-    <description>Demo project for Spring Boot</description>
+    <description>KNote App</description>
 
     <properties>
         <java.version>11</java.version>
@@ -83,6 +83,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <imageName>docker.io/hendisantika/${project.artifactId}:${version}</imageName>
                     <excludes>
                         <exclude>
                             <groupId>org.springframework.boot</groupId>
