@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: learnk8s/knote-java:1.0.0
+          image: hendisantika/knote:1.0.0
           ports:
             - containerPort: 8080
           env:
